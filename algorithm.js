@@ -60,9 +60,10 @@ function getDistributions(steps, start) {
 function getDistribution(steps, start) {
 	var gen = distributionGenerator(start),
 		dist;
-	for (var i = 0; i < steps; i++) {
+	for (var i = 0; i <= steps; i++) {
 		dist = gen.next();
 	}
+	// math.js shit
 	return dist.value;
 }
 
@@ -81,30 +82,33 @@ function* distributionGenerator(start) {
 }
 
 // charts norms from paths of lengths 0 to 99
-function chartNorms() {
+function chartNorms(chartDistribution) {
 	var numDataPoints = 75;
 	var data = {
 	    labels: new Array(numDataPoints).fill(0).map(function(value, idx) { return idx}),
 	    datasets: [
 	        {
-	            label: "My First dataset",
+	            label: "L1 norm of \u03D5(x)-\u03C0",
 	            fillColor: "rgba(220,220,220,0.2)",
 	            strokeColor: "rgba(220,220,220,1)",
 	            pointColor: "rgba(220,220,220,1)",
 	            pointStrokeColor: "#fff",
 	            pointHighlightFill: "#fff",
 	            pointHighlightStroke: "rgba(220,220,220,1)",
-	            data: getNorms(numDataPoints, 0)
+	            data: getNorms(numDataPoints, 0).map(function (norm) { return norm.toFixed(5); })
 	        }
 	    ]
 	};
 	var options = {
 		pointDot: false,
-		pointHitDetectionRadius: 1.05
+		pointHitDetectionRadius: 1.05,
+		scaleShowVerticalLines: false,
+		scaleShowHorizontalLines: false
 	};
 	var cnvs = document.getElementById("normChart");
 	var ctx = cnvs.getContext("2d");
 	var chart = new Chart(ctx).Line(data, options);
+	document.getElementById("normLegend").innerHTML = chart.generateLegend();
 	cnvs.onclick = function (evt) {
 		var activePoints = chart.getPointsAtEvent(evt);
 		console.log(activePoints[0].label);
@@ -112,17 +116,18 @@ function chartNorms() {
 	};
 }
 
-function chartDistribution(steps, start) {
+function getChartDistributionFn() {
+	var ctx = document.getElementById("distributionChart").getContext("2d");
 	var data = {
 	    labels: ["a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10", "a11", "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11"],
 	    datasets: [
 	        {
-	            label: "Distribution",
+	            label: "Paths of length 0 starting at a1",
 	            fillColor: "rgba(220,220,220,0.5)",
 	            strokeColor: "rgba(220,220,220,0.8)",
 	            highlightFill: "rgba(220,220,220,0.75)",
 	            highlightStroke: "rgba(220,220,220,1)",
-	            data: getDistribution(steps, start)
+	            data: getDistribution(0, 0)
 	        },
 	        {
 	            label: "Uniform Distribution",
@@ -134,12 +139,23 @@ function chartDistribution(steps, start) {
 	        }
 	    ]
 	};
-	var ctx = document.getElementById("distributionChart").getContext("2d");
 	var chart = new Chart(ctx).Bar(data);
+	document.getElementById("distLegend").innerHTML = chart.generateLegend();
+	var fn = function(steps, start) {
+		var dist = getDistribution(steps, start);
+		dist.forEach(function (value, idx) {
+			chart.datasets[0].bars[idx].value = value;
+		});
+		chart.datasets[0].label = "Paths of length " + steps + " starting at a1";
+		chart.update();
+		document.getElementById("distLegend").innerHTML = chart.generateLegend();
+	}
+
+	return fn;
 }
 
-chartNorms();
-chartDistribution(1, 0);
+var chartDistribution = getChartDistributionFn();
+chartNorms(chartDistribution);
 
 // take x-pi (take L1, L2 norm)
 // plot over number of steps

@@ -32,7 +32,7 @@
     // Call the callback if specified:
     if (callback)
       callback(sig || graph);
-  
+
     sig.bind("clickNode", function (data) {
       node = data.data.node;
       console.log(node.label);

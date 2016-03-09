@@ -2,17 +2,56 @@
 <head>
 <style type="text/css">
   #container {
-    max-width: 400px;
-    height: 400px;
+    max-width: 350px;
+    height: 350px;
     margin: auto;
+  }
+  .chart-container {
+    width: 800px;
+    height: 400px;
+    position: relative;
+    display: block;
+  }
+  .dist-chart {
+    float: right;
+  }
+  .norm-chart {
+    position: absolute;
+  }
+  .line-legend li span{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+  }
+  ul.line-legend {
+    list-style-type:none;
+  }
+  ul.bar-legend {
+    list-style-type:none;
+  }
+  .bar-legend li span{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
   }
 </style>
 </head>
 <body>
-<div>Click on a vertex to play its note.</div>
+<!-- <div>Click on a vertex to play its note.</div>
+ -->
+<div class="chart-container">
+  <div class="dist-chart">
+    <canvas class="dist-chart" id="distributionChart" width="500" height="300"></canvas>
+    <div id="distLegend"></div>
+  </div>
+  <div class="norm-chart">
+    <canvas id="normChart" width="800" height="400"></canvas>
+    <div id="normLegend"></div>
+  </div>
+</div>
 <div id="container"></div>
-<canvas id="normChart" width="800" height="400"></canvas>
-<canvas id="distributionChart" width="800" height="400"></canvas>
 <script src="./inc/shim/Base64.js" type="text/javascript"></script>
 <script src="./inc/shim/Base64binary.js" type="text/javascript"></script>
 <script src="./inc/shim/WebAudioAPI.js" type="text/javascript"></script>
@@ -28,7 +67,9 @@
   sigma.parsers.musicalGraph({
     container: 'container',
     settings: {
-      defaultNodeColor: '#ec5148'
+      defaultNodeColor: '#ec5148',
+      zoomMin: 1,
+      zoomMax: 1
     }
   });
 </script>
