@@ -11,14 +11,19 @@
 <body>
 <div>Click on a vertex to play its note.</div>
 <div id="container"></div>
+<canvas id="normChart" width="800" height="400"></canvas>
+<canvas id="distributionChart" width="800" height="400"></canvas>
 <script src="./inc/shim/Base64.js" type="text/javascript"></script>
 <script src="./inc/shim/Base64binary.js" type="text/javascript"></script>
 <script src="./inc/shim/WebAudioAPI.js" type="text/javascript"></script>
 <script src="MIDI.min.js"></script>
 
-<script src="sigma/sigma.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.1.0/sigma.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/2.7.0/math.min.js"></script>
 <script src="musical_graph_data.js"></script>
 <script src="musical_graph.js"></script>
+<script src="algorithm.js"></script>
 <script>
   sigma.parsers.musicalGraph({
     container: 'container',
