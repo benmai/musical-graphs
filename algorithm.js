@@ -88,7 +88,7 @@ function chartNorms(chartDistribution) {
 	    labels: new Array(numDataPoints).fill(0).map(function(value, idx) { return idx}),
 	    datasets: [
 	        {
-	            label: "L1 norm of \u03D5(x)-\u03C0",
+	            label: "|\u03D5(a1, n)-\u03C0|<sub>1</sub> (L1 Norm)",
 	            fillColor: "rgba(220,220,220,0.2)",
 	            strokeColor: "rgba(220,220,220,1)",
 	            pointColor: "rgba(220,220,220,1)",
@@ -131,7 +131,7 @@ function getChartDistributionFn() {
 	    labels: ["a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10", "a11", "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11"],
 	    datasets: [
 	        {
-	            label: "Paths of length 0 starting at a1",
+	            label: "\u03D5(a0, 0) (Paths of length 0 starting at a0)",
 	            fillColor: "rgba(220,220,220,0.5)",
 	            strokeColor: "rgba(220,220,220,0.8)",
 	            highlightFill: "rgba(220,220,220,0.75)",
@@ -139,7 +139,7 @@ function getChartDistributionFn() {
 	            data: getDistribution(0, 0)
 	        },
 	        {
-	            label: "Uniform Distribution",
+	            label: "\u03C0 (Uniform Distribution)",
 	            fillColor: "rgba(151,187,205,0.5)",
 	            strokeColor: "rgba(151,187,205,0.8)",
 	            highlightFill: "rgba(151,187,205,0.75)",
@@ -176,7 +176,7 @@ function getChartDistributionFn() {
 		dist.forEach(function (value, idx) {
 			chart.datasets[0].bars[idx].value = value;
 		});
-		chart.datasets[0].label = "Paths of length " + steps + " starting at a1";
+		chart.datasets[0].label = "\u03D5(a0, " + steps + ") (Paths of length " + steps + " starting at a0)";
 		chart.update();
 		document.getElementById("distLegend").innerHTML = chart.generateLegend();
 	}
