@@ -19,10 +19,11 @@
     for (var i = 0; i < 12; i++) {
       var node = {
         id: "a" + i,
-        label: aLabels[i], // change to note
+        label: "a" + i, // aLabels[i], // change to note
         x: r + r * Math.cos(i * Math.PI/6 + Math.PI/12),
         y: r + r * Math.sin(i * Math.PI/6 + Math.PI/12),
         size: 1
+        // color: "#FFFF"
       };
       nodes.push(node);
 
@@ -35,7 +36,7 @@
     for (var i = 0; i < 12; i++) {
       var node = {
         id: "b" + i,
-        label: bLabels[i], // change to note
+        label: "b" + i, // bLabels[i], // change to note
         x: r + (r - .75) * Math.cos(i * Math.PI/6 + Math.PI/12),
         y: r + (r - .75) * Math.sin(i * Math.PI/6 + Math.PI/12),
         size: 1
@@ -55,4 +56,5 @@
 
   MusicalGraph = {};
   MusicalGraph.data = musicalGraphData();
+  MusicalGraph.labels = {a: aLabels, b: bLabels};
 })(this);

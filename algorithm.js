@@ -116,6 +116,15 @@ function chartNorms(chartDistribution) {
 	};
 }
 
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function grayscaleToHex(c) {
+    return "#" + componentToHex(c) + componentToHex(c) + componentToHex(c);
+}
+
 function getChartDistributionFn() {
 	var ctx = document.getElementById("distributionChart").getContext("2d");
 	var data = {
@@ -143,6 +152,27 @@ function getChartDistributionFn() {
 	document.getElementById("distLegend").innerHTML = chart.generateLegend();
 	var fn = function(steps, start) {
 		var dist = getDistribution(steps, start);
+		var differences = dist.map(function (value) {
+			return Math.abs(value - uniform);
+		});
+		var max = Math.max.apply(this, differences);
+		// debugger;
+		var colors = differences.map(function (value) {
+			var grayscale = parseInt((value * 255 / uniform).toFixed(0));
+			console.log(grayscale);
+			var color = grayscaleToHex(Math.min(grayscale, 255));
+			return color;
+		});
+		// color the graph
+		var inst = sigma.instances()[0];
+		var graph = inst.graph;
+
+		graph.nodes().forEach(function (node, idx) {
+			node.color = colors[idx];
+		});
+
+		inst.refresh();
+
 		dist.forEach(function (value, idx) {
 			chart.datasets[0].bars[idx].value = value;
 		});
