@@ -49,22 +49,22 @@ function normL1(x) {
 }
 
 function getDistributions(steps, start) {
-	var gen = distributionGenerator(start),
+	var gen = distributionGeneratorHack(start),
 	    out = new Array(steps);
 	for (var i = 0; i < steps; i++) {
-		out[i] = gen.next().value;
+		out[i] = gen();
 	}
 	return out;
 }
 
 function getDistribution(steps, start) {
-	var gen = distributionGenerator(start),
+	var gen = distributionGeneratorHack(start),
 		dist;
 	for (var i = 0; i <= steps; i++) {
-		dist = gen.next();
+		dist = gen();
 	}
 	// math.js shit
-	return dist.value;
+	return dist;
 }
 
 function getNorms(steps, start) {
@@ -72,14 +72,27 @@ function getNorms(steps, start) {
 	return distributions.map(normL1);
 }
 
-function* distributionGenerator(start) {
+function distributionGeneratorHack(start) {
 	var T = getT(), x = getX(start);
-	yield x;
-	for(;;) {
+	return function() {
+		var oldX = x;
 		x = math.multiply(T, x);
-		yield x.toArray();
+		if (typeof oldX.toArray !== 'undefined') {
+			return oldX.toArray();
+		} else {
+			return oldX;
+		}
 	}
 }
+
+// function* distributionGenerator(start) {
+// 	var T = getT(), x = getX(start);
+// 	yield x;
+// 	for(;;) {
+// 		x = math.multiply(T, x);
+// 		yield x.toArray();
+// 	}
+// }
 
 // charts norms from paths of lengths 0 to 99
 function chartNorms(chartDistribution) {
